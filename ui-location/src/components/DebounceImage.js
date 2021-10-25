@@ -14,6 +14,7 @@ function DebounceImage() {
             <DebounceInput className="DebounceInput"
                 minLength={1}
                 debounceTimeout={1000}
+                placeholder={"Enter your city name"}
                 onChange={(e) => {
                     setImageLoaded(false);
                     setState(removeWhiteSpace(e.target.value));
