@@ -3,10 +3,10 @@ import { loadImage } from '../utils/ImageHelper.js';
 import { Async } from "react-async"
 import "./DebounceImage.css";
 
-function validateAndGetCity(city, alternativeUrl) {
+function validateAndGetCityUrl(city) {
     if (city && city.cityImageUrl)
         return city.cityImageUrl;
-    return alternativeUrl
+    return undefined;
 }
 
 function AsyncImage(props) {
@@ -17,7 +17,12 @@ function AsyncImage(props) {
 
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <Async promiseFn={() => loadImage(query).then(city => validateAndGetCity(city, query))} >
+            <Async promiseFn={() => loadImage(query)
+                .then(city => validateAndGetCityUrl(city))
+                .then(url=> fetch(url)
+                        .then(res=> res.blob())
+                        .then(res=>URL.createObjectURL(res))
+                        .catch(err=>console.error(err)))} >
                 <Async.Pending>Loading...</Async.Pending>
                 <Async.Fulfilled>
                     {(data) => (
